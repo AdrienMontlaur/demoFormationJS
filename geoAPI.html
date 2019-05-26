@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>API Géo api gouv</title>
+</head>
+<body>
+<h1>API Géo api gouv</h1>
+
+<form method='get' action=#>
+  <label for="commune">Code postal</label>
+  <input type="text" id="commune" name="commune" placeholder="XXXXX">
+  <button type="button" id="button" name="button">OK</button>
+</form>
+<p id='infos'></p>
+<ul id="monUl"></ul>
+<script src="ajaxGet.js"> </script>
+<script>
+code=document.getElementById("commune");
+
+document.getElementById('button').addEventListener("click",function(e){
+  document.getElementById('infos').textContent=("");
+  document.getElementById('monUl').textContent=("");
+
+  ajaxGet("https://geo.api.gouv.fr/communes?codePostal="+code.value, function(communes){
+
+    let root=JSON.parse(communes);
+    console.log(root);
+    compteur=root.length;
+    let regexp=/^\d\d\d\d\d$/;
+    if(!regexp.test(code.value)){
+      document.getElementById('infos').textContent=("Rentrez un code postal valide");
+    }
+    else if (compteur===0){
+      document.getElementById('infos').textContent=("Aucune commune à ce code postal");
+    }
+    else{
+      document.getElementById('infos').textContent=("Il y a "+compteur+" résultats");
+      for(let i=0; i<compteur; i++){
+        let commune=root[i];
+        let li = document.createElement("li");
+        li.textContent=commune.nom;
+        document.getElementById('monUl').appendChild(li);
+      };
+    }
+  });
+})
+</script>
+</body>
+</html>

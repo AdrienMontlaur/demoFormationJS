@@ -1,0 +1,67 @@
+<!DOCTYPE html> 
+<html> 
+<head>
+    <meta charset="utf-8" />
+    <title>Exercice 1 : formulaire de connexion</title>
+</head> 
+<body> 
+    <form action="https://www.qwant.com" method="post"> <!-- pour test! -->
+        <p>
+            <label for="login">Email :</label> 
+            <input type="text" name="login" id="login" required>
+        </p>
+        <p>
+            <label for="mdp">Mot de passe :</label> 
+            <input type="password" name="mdp" id="mdp" required>
+        </p>
+        <input type="submit" value="Envoyer">
+    </form>
+    <p id="msg"></p> <!-- pour afficher le message d'erreur -->
+
+    <script>
+        let login=document.getElementById('login');
+        let message=document.getElementById("msg");
+        let form=document.querySelector("form"); 
+        let mdp=document.getElementById("mdp");
+        //Gestion de l'envoie du formulaire
+
+        form.addEventListener("submit",function(e){
+            message.innerHTML="";
+            let regexLogin= /^[a-z0-9._-]+@[a-z0-9._-]+\.[a-z]{2,6}$/;
+
+                //Test sur le login
+                if(!regexLogin.test(login.value)){
+                  e.preventDefault();
+                  message.innerHTML+="Erreur: Veuillez entrer une adresse mail valide<br/>" 
+                }
+
+                //Test sur le MDP
+            let regexMDP=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{6,}$/;
+            let regexMDPMaj=/(?=.*[A-Z])/;
+            let regexMDPMin=/(?=.*[a-z])/;
+            let regexMDPNum=/(?=.*\d)/;
+            let regexMDPCara=/(?=.*[#$^+=!*()@%&])/;
+                if(!regexMDP.test(mdp.value)){
+                  e.preventDefault();
+                    if (mdp.value.length<6){
+                        message.innerHTML+="Erreur: Mot de passe trop court<br/>"
+                    }
+                    if (!regexMDPMaj.test(mdp.value)){
+                        message.innerHTML+="Erreur: Il faut au moins une majuscule dans le MDP<br/>"
+                    }
+                    if (!regexMDPMin.test(mdp.value)){
+                        message.innerHTML+="Erreur: Il faut au moins une minuscule dans le MDP<br/>"
+                    }
+                    if (!regexMDPNum.test(mdp.value)){
+                        message.innerHTML+="Erreur: Il faut au moins un chiffre dans le MDP<br/>"
+                    }
+                    if (!regexMDPCara.test(mdp.value)){
+                        message.innerHTML+="Erreur: Il faut au moins un caractère spécial dans le MDP<br/>"
+                    }
+                }
+            
+        })
+
+    </script>
+</body> 
+</html>
